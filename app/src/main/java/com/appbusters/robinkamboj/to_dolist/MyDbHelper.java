@@ -22,7 +22,7 @@ public class MyDbHelper extends SQLiteOpenHelper{
     //create table sql statement
     private static final String DATABASE_CREATE= "create table " + TABLE_COMMENTS + "( " + COLUMN_ID + " integer primary key autoincrement, " + COLUMN_COMMENT + "text not null);";
 
-    public MyDbHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public MyDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
