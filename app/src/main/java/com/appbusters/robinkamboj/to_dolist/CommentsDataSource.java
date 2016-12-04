@@ -39,7 +39,7 @@ public class CommentsDataSource {
         ContentValues values= new ContentValues();
         values.put(MyDbHelper.COLUMN_COMMENT,comment);
         long insertId= database.insert(MyDbHelper.TABLE_COMMENTS,null,values);
-        Cursor cursor= database.query(MyDbHelper.TABLE_COMMENTS,allColumns,MyDbHelper.COLUMN_ID + "=" + insertId,null,null,null,null);
+        Cursor cursor= database.query(MyDbHelper.TABLE_COMMENTS,allColumns,MyDbHelper.COLUMN_ID + " = " + insertId,null,null,null,null);
         cursor.moveToFirst();
         Comment newComment= cursorToComment(cursor);
         cursor.close();
@@ -48,8 +48,8 @@ public class CommentsDataSource {
 
     public void deleteComment(Comment comment){
         long id= comment.getId();
-        System.out.println("Comment deleted with id: " + id);
-        database.delete(MyDbHelper.TABLE_COMMENTS,MyDbHelper.COLUMN_ID + "=" + id, null);
+        System.out.println(" Comment deleted with id: " + id);
+        database.delete(MyDbHelper.TABLE_COMMENTS,MyDbHelper.COLUMN_ID + " = " + id, null);
     }
 
     public List<Comment> getAllComments(){

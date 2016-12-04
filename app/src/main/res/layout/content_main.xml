@@ -43,8 +43,8 @@
             android:backgroundTint="@color/colorAccent" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
