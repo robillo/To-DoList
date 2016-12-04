@@ -5,6 +5,7 @@ package com.appbusters.robinkamboj.to_dolist;
  */
 
 public class Comment {
+
     private  long id;
     private String comment;
 

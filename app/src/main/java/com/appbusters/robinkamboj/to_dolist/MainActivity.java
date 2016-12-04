@@ -1,5 +1,6 @@
 package com.appbusters.robinkamboj.to_dolist;
 
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,25 +13,23 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import java.util.List;
+import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ListActivity {
 
-    private CommentsDataSource dataSource;
+    private CommentsDataSource datasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        dataSource= new CommentsDataSource(this);
-        dataSource.open();
-        List<Comment> values= dataSource.getAllComments();
+        datasource= new CommentsDataSource(this);
+        datasource.open();
+        List<Comment> values= datasource.getAllComments();
         //use the SimpleCursorAdapter to show elements in the recyclerview
         ArrayAdapter<Comment> adapter= new ArrayAdapter<Comment>(this, android.R.layout.simple_list_item_1,values);
-        RecyclerView recyclerView= (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setAdapter(adapter);
+        setListAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -40,6 +39,43 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    // Will be called via the onClick attribute
+    // of the buttons in main.xml
+    public void onClick(View view) {
+        @SuppressWarnings("unchecked")
+        ArrayAdapter<Comment> adapter = (ArrayAdapter<Comment>) getListAdapter();
+        Comment comment = null;
+        switch (view.getId()) {
+            case R.id.add:
+                String[] comments = new String[] { "Cool", "Very nice", "Hate it" };
+                int nextInt = new Random().nextInt(3);
+                // save the new comment to the database
+                comment = datasource.createComment(comments[nextInt]);
+                adapter.add(comment);
+                break;
+            case R.id.delete:
+                if (getListAdapter().getCount() > 0) {
+                    comment = (Comment) getListAdapter().getItem(0);
+                    datasource.deleteComment(comment);
+                    adapter.remove(comment);
+                }
+                break;
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
     }
 
     @Override
